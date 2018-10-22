@@ -41,7 +41,7 @@ plot(rec ~ ssb,
      xlim = c(0, max(ssb)), # set x limits
      ylim = c(0, max(rec)), # set y limits
      xlab = 'Spawning Stock Biomass (tonnes)',
-     ylab = 'Age-1 Recruitment')
+     ylab = 'Age-0 Recruitment')
 
 
 ###############################################################################
@@ -60,19 +60,19 @@ plot(rec ~ ssb,
 #------------------------------------------------------------------------------
 
 # starting values for b1 and b2
-b1 <- 1000000
-b2 <- 300000
+a <- 1
+b <- 1
 
 # set up the other variables (i.e. S)
 S <- herring$ssb
 
-Rpred <- b1 * S / (b2 + S)
+Rpred <- a * S / (b + S)
 
 #------------------------------------------------------------------------------
 # (2) Calculate log residuals, Ln(obs/pred)
 #------------------------------------------------------------------------------
 
-# assigne observed recruitment
+# assign observed recruitment
 Robs <- herring$rec
 
 resids <- log(Robs / Rpred) # = log(Robs) - log(Rpred)
@@ -90,11 +90,11 @@ log(exp(10))
 ssq_resids <- sum(resids^2)
 
 #------------------------------------------------------------------------------
-# (4) Minimize sum-of-squares with solver by adjusting b1 and b2
+# (4) Minimize sum-of-squares with solver by adjusting a and b
 #------------------------------------------------------------------------------
 
 # to do this, we need to set up a function that takes
-# b1 and b2 as input, and returns the sums of squared residuals
+# a and b as input, and returns the sums of squared residuals
 
 # in R a function is a collection of steps: i.e.
 add <- function(b1, b2) {
@@ -104,9 +104,9 @@ add(1, 2)
 # 3
 
 # the sums of squares function is collection of the previous 3 steps:
-ssq <- function(b1, b2) {
+ssq <- function(a, b) {
   # 1. Calculate predicted R for each year
-  Rpred <- b1 * S / (b2 + S)
+  Rpred <- a * S / (b + S)
   # 2. Calculate log residuals, Ln(obs/pred)
   resids <- log(Robs / Rpred)
   # 3. Calculate sum of squared residuals
@@ -117,9 +117,9 @@ ssq <- function(b1, b2) {
 }
 
 # lets test this out:
-ssq(b1, b2)
-ssq(1000000, 300000)
-ssq(1000000, 200000)
+ssq(a, b)
+ssq(1, 1)
+ssq(2, 1)
 
 # now we need to search over lots of values for b1 and b2 to
 # find the minimum.
@@ -128,15 +128,15 @@ ssq(1000000, 200000)
 ?optim
 
 ssq_optim <- function(par) {
-  b1 <- par[1]
-  b2 <- par[2]
+  a <- par[1]
+  b <- par[2]
 
-  ssq(b1, b2)
+  ssq(a, b)
 }
 
 # use c to combine the starting values into a vector
 ?c
-par0 <- c(1000000, 300000)
+par0 <- c(1, 1)
 
 # lets test the new ssq funciton
 ssq_optim(par0)
@@ -146,24 +146,30 @@ opt <- optim(par0, ssq_optim)
 
 opt
 
+# it didn't do so well....  lets try with different starting values:
+opt <- optim(c(32000000, 300), ssq_optim)
+
+opt
+
+# better now :)
 
 #------------------------------------------------------------------------------
 # (5) Plot observed and predicted R
 #------------------------------------------------------------------------------
 
 # get the parameter estimates from the optimisation
-b1 <- opt$par[1]
-b2 <- opt$par[2]
+a <- opt$par[1]
+b <- opt$par[2]
 
 # predict recruitment
-Rpred <- b1 * S / (b2 + S)
+Rpred <- a * S / (b + S)
 
 # plot
 plot(Robs ~ S,
      xlim = c(0, max(S)), # set x limits
      ylim = c(0, max(Robs)), # set y limits
      xlab = 'Spawning Stock Biomass (tonnes)',
-     ylab = 'Age-1 Recruitment')
+     ylab = 'Age-0 Recruitment')
 
 # add predictions to the plot
 points(Rpred ~ S, col = "red", pch = 2)
@@ -224,7 +230,7 @@ bevholt <- function(b, S) {
 }
 
 # compute R at the starting values for b1 and b2
-Rpred <- bevholt(c(1000000, 300000), S = herring$ssb)
+Rpred <- bevholt(c(1, 1), S = herring$ssb)
 
 # lets jump to step 4 ...
 
@@ -249,9 +255,9 @@ ssq <- function(b, S, Robs) {
 }
 
 # lets test this out:
-ssq(c(b1, b2), herring$ssb, herring$rec) # what to you notice this time?
-ssq(c(1000000, 300000), herring$ssb, herring$rec)
-ssq(c(1000000, 200000), herring$ssb, herring$rec)
+ssq(c(a, b), herring$ssb, herring$rec) # what to you notice this time?
+ssq(c(1, 1), herring$ssb, herring$rec)
+ssq(c(2, 2), herring$ssb, herring$rec)
 
 # now we need to search over lots of values for b1 and b2 to
 # find the minimum.
@@ -263,7 +269,7 @@ ssq_optim <- function(par, S, Robs) {
 }
 
 # use c to combine the starting values into a vector
-par0 <- log(c(1000000, 300000))
+par0 <- log(c(1, 1))
 
 # lets test the new ssq funciton
 ssq_optim(par0, S = herring$ssb, Robs = herring$rec)
@@ -288,7 +294,7 @@ plot(rec ~ ssb,
      xlim = c(0, max(S)), # set x limits
      ylim = c(0, max(Robs)), # set y limits
      xlab = 'Spawning Stock Biomass (tonnes)',
-     ylab = 'Age-1 Recruitment')
+     ylab = 'Age-0 Recruitment')
 
 # add predictions to the plot as a line
 lines(Rpred ~ Spred, col = "red", pch = 2)
@@ -303,9 +309,14 @@ lines(Rpred ~ Spred, col = "red", pch = 2)
 
 
 
+
+
+
+
 ###############################################################################
-# We are now going to demonstrate a techniques for calculating confidence
-# intervals
+# The following is to demonstrate a techniques for calculating confidence
+# intervals - this is not part of the course and purely for demonstation
+# purposes
 ###############################################################################
 
 # Bootstrapping is so called because it is like you are acheieving something
@@ -409,12 +420,7 @@ matplot(Spred, Rpred[, sample(1:ncol(Rpred), 100)], type = "l", lty = 1, col = g
         xlim = c(0, max(S)), # set x limits
         ylim = c(0, max(Robs)), # set y limits
         xlab = 'Spawning Stock Biomass (tonnes)',
-        ylab = 'Age-1 Recruitment',
+        ylab = 'Age-0 Recruitment',
         main = "boostraped error in stock recruitment relationship")
 # add the data
 points(herring$ssb, herring$rec, type = "b", pch = 16, col = "red")
-
-
-
-
-## residuals
