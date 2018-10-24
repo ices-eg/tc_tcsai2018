@@ -65,7 +65,7 @@ alpha <- 1000
 beta <- 1000
 
 pop <- AgeModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000)
-round(t(pop$N))
+round(pop$N)
 
 RecPlot(AgeModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000),
         Slim=c(0,20000), Rlim=c(0,2000))

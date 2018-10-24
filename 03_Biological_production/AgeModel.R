@@ -59,7 +59,7 @@ for(t in 1:(Tmax-1))
   SSB[,t+1] <- N[,t+1] * mat * w
 }
 
-t(round(N))
+round(N)
 
 SR <- data.frame(year, SSB=colSums(SSB), Rec=N[1,])
 
@@ -97,7 +97,7 @@ for(t in 1:(Tmax-1))
   SSB[,t+1] <- N[,t+1] * mat * w
 }
 
-t(round(N))
+round(N)
 
 SR <- data.frame(year, SSB=colSums(SSB), Rec=N[1,])
 
