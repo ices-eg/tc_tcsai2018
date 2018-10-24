@@ -279,6 +279,13 @@ opt <- optim(par0, ssq_optim, S = herring$ssb, Robs = herring$rec)
 
 opt
 
+# the fit is not quite there yet, so lets try better starting values.
+# this highlights the presence of multiple 'local' minima
+par0 <- c(20, 5)
+opt <- optim(par0, ssq_optim, S = herring$ssb, Robs = herring$rec)
+
+opt
+
 
 #------------------------------------------------------------------------------
 # (5) Plot observed and predicted R
