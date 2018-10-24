@@ -1,5 +1,6 @@
 ## Read data, prepare matrices
-C <- as.matrix(read.table("bluefin.dat", header=TRUE, check.names=FALSE, row.names=1)) / 1000
+C <- as.matrix(read.table("bluefin.dat", header=TRUE,
+                          check.names=FALSE, row.names=1)) / 1000
 T <- nrow(C)
 A <- ncol(C)
 N <- F <- Z <- matrix(NA_real_, nrow=T, ncol=A, dimnames=dimnames(C))
