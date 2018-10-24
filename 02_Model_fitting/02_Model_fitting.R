@@ -11,7 +11,7 @@
 #==============================================================================
 
 # load data from comma-separated file to data.frame
-herring <- read.csv(file = 'data/north_sea_herring_SR.csv', header = TRUE)
+herring <- read.csv(file = 'north_sea_herring_SR.csv', header = TRUE)
 
 # take a look at what we have
 head(herring) # this looks at the first 6 rows
