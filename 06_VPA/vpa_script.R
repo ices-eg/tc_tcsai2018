@@ -5,7 +5,7 @@ catage <- read.table("bluefin.dat", header=TRUE, check.names=FALSE, row.names=1)
 catage <- catage / 1000
 
 ## Run model
-model <- vpa(catage, 0.14, 0.1, 5)
+model <- vpa(catage, M=0.14, Fterm=0.1, Fages=5)
 
 ## View results
 par(mfrow=c(2,2))
