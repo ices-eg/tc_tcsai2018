@@ -1,7 +1,7 @@
 ################################################################################
 ## Functions
 
-RecModel <- function(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v)
+AgeModel <- function(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v)
 {
   N <- matrix(nrow=Amax, ncol=Tmax)
   SSB <- numeric(Tmax)
@@ -64,8 +64,8 @@ w <- 10 * (1-exp(-0.5*((1:Amax)+0.1)))^3
 alpha <- 1000
 beta <- 1000
 
-pop <- RecModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000)
+pop <- AgeModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000)
 round(t(pop$N))
 
-RecPlot(RecModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000),
+RecPlot(AgeModel(Ninit, M, Fmort, mat, w, Amax, Tmax, alpha, beta, v=1000),
         Slim=c(0,20000), Rlim=c(0,2000))
