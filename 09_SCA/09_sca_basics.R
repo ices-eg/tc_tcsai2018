@@ -70,7 +70,7 @@ c(catch=neglogL(Cres), survey=neglogL(Ires))
 neglogL2 <- function(res)
 {
   -1 * sum(
-    dnorm(res, sd = sqrt(sum(res^2)/length(res)), log = TRUE)
+    dnorm(res, sd = sqrt(mean(res^2)), log = TRUE)
   )
 }
 

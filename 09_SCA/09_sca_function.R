@@ -99,7 +99,7 @@ sca <- function(par, data, full=FALSE)
   Ires <- log(I) - log(Ihat)
   neglogL <- function(res)
   {
-    -1 * sum(dnorm(res, sd = sqrt(sum(res^2)/length(res)), log = TRUE))
+    -1 * sum(dnorm(res, sd = sqrt(mean(res^2)), log = TRUE))
   }
 
   loglik_components <- c(catch = neglogL(Cres), survey = neglogL(Ires))
