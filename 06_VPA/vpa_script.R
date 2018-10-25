@@ -27,5 +27,6 @@ plot(colMeans(model$F)/max(colMeans(model$F)), ylim=c(0,1.05), yaxs="i",
      type="l", main="Selectivity", xlab="Age", ylab="Average F at age")
 
 ## 4 Fbar
-plot(Year, model$F[,15], ylim=c(0,0.12), yaxs="i", main="Fbar (10-14)",
-     ylab="Average F at ages 10-14", type="l")
+Fbar2.5 <- rowMeans(model$F[,2:5])
+plot(Year, Fbar2.5, ylim=c(0,0.35), yaxs="i", main="Fbar (2-5)",
+     ylab="Average F at ages 2-5", type="l")
