@@ -249,8 +249,8 @@ results <- sapply(Fsteps, ypr)
 # (15) Plot YPR and SPR as a function of F
 #------------------------------------------------------------------------------
 
-# plot side by side
-par(mfrow = c(1,2))
+# two plots on one page
+par(mfrow = c(2,1))
 
 # ypr plot
 plot(Fsteps, results["YPR",], type = "l",
