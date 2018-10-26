@@ -291,12 +291,14 @@ abline(h = Fmax)
 #------------------------------------------------------------------------------
 
 # use linear interpolation to get the value of F when SPR is 0.4 SPR when F = 0
-apprx <- approx(results$SPR, Fsteps, xout = results$SPR[1] * 0.4)
+results
+SPR0 <- results$SPR[results$Fsteps==0.0]
+apprx <- approx(results$SPR, Fsteps, xout = 0.4 * SPR0)
 F40 <- apprx$y
 
 # spr plot
 plot(Fsteps, results$SPR, type = "b",
      ylab = "Spawners per recruit", las = 1)
 # a line showing F40
-lines(c(F40, F40), c(0, SPR * 0.4), col = "red")
+lines(c(F40, F40), c(0, 0.4 * SPR0), col = "red")
 
