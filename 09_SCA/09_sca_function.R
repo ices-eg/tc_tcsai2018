@@ -63,9 +63,9 @@ sca <- function(par, data, full=FALSE)
   nAges <- maxAge - minAge + 1
 
   ## Prepare containers
-  N <- matrix(NA_real_, nrow=nYears + 1, ncol = nAges,
-              dimnames = list(minYear:(maxYear + 1), minAge:maxAge))
-  F <- matrix(NA_real_, nrow=nYears, ncol = nAges, dimnames = dimnames(C))
+  N <- matrix(NA_real_, nrow=nYears+1, ncol=nAges,
+              dimnames=list(minYear:(maxYear+1), minAge:maxAge))
+  F <- matrix(NA_real_, nrow=nYears, ncol=nAges, dimnames=dimnames(C))
 
   ## Evaluate F, Z, and N
   Fa <- exp(c(logFa, 0))
@@ -73,7 +73,7 @@ sca <- function(par, data, full=FALSE)
   F[] <- Ft %o% Fa
   Z <- F + M
   N[1,] <- exp(logNa)
-  N[-1, 1] <- exp(logNt)
+  N[-1,1] <- exp(logNt)
 
   A <- ncol(N)
   T <- nrow(N)
@@ -81,14 +81,14 @@ sca <- function(par, data, full=FALSE)
   {
     for(a in 1:(A-2))
     {
-      N[t+1, a+1] <- N[t, a] * exp(-Z[t, a])
+      N[t+1,a+1] <- N[t,a] * exp(-Z[t,a])
     }
-    N[t+1, A] <- N[t, A-1] * exp(-Z[t, A-1]) + N[t, A] * exp(-Z[t, A])
+    N[t+1,A] <- N[t,A-1] * exp(-Z[t,A-1]) + N[t,A] * exp(-Z[t,A])
   }
 
   ## Predict C and I
-  Nc <- N[-nrow(N), ]
-  Chat <- F / Z * Nc * (1 - exp(-Z))
+  Nc <- N[-nrow(N),]
+  Chat <- F/Z * Nc * (1-exp(-Z))
   Chat <- Chat[rownames(Nc) %in% rownames(C), colnames(Nc) %in% colnames(C)]
 
   Ni <- N[rownames(N) %in% rownames(I), colnames(N) %in% colnames(I)]
@@ -101,17 +101,14 @@ sca <- function(par, data, full=FALSE)
   {
     -1 * sum(dnorm(res, sd = sqrt(mean(res^2)), log = TRUE))
   }
-
-  loglik_components <- c(catch = neglogL(Cres), survey = neglogL(Ires))
+  f <- c(catch=neglogL(Cres), survey=neglogL(Ires))
 
   ## Prepare output
-  if (full)
-    out <- list(par = par, C = C, I = I, M = M, N = N, F = F, Z = Z,
-                Chat = Chat, Ihat = Ihat,
-                Cres = Cres, Ires = Ires,
-                loglik_components = loglik_components)
+  if(full)
+    out <- list(par=par, C=C, I=I, M=M, N=N, F=F, Z=Z, Chat=Chat, Ihat=Ihat,
+                Cres=Cres, Ires=Ires, f=f)
   else
-    out <- sum(loglik_components)
+    out <- sum(f)
 
   out
 }
