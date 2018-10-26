@@ -56,24 +56,7 @@ Ires <- log(I) - log(Ihat)
 ## Evaluate likelihood
 neglogL <- function(res)
 {
-  RSS <- sum(res^2)
-  n <- length(res)
-  sigma <- sqrt(RSS/n)
-  n/2*log(2*pi) + n*log(sigma) + RSS/(2*sigma^2)
+  -sum(dnorm(res, sd=sqrt(mean(res^2)), log=TRUE))
 }
 
 c(catch=neglogL(Cres), survey=neglogL(Ires))
-
-
-# or - equivalently using dnorm
-# see: ?dnorm
-neglogL2 <- function(res)
-{
-  -1 * sum(
-    dnorm(res, sd = sqrt(mean(res^2)), log = TRUE)
-  )
-}
-
-c(catch=neglogL2(Cres), survey=neglogL2(Ires))
-
-
