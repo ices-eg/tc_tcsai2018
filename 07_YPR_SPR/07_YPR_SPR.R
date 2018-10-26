@@ -281,7 +281,7 @@ Fmax <- opt$maximum
 # status of the tuna fishery in 2007?
 #------------------------------------------------------------------------------
 
-plot(vpafit$F[,11], type = "l")
+plot(vpafit$F[,3], type = "l")
 abline(h = Fmax)
 
 
