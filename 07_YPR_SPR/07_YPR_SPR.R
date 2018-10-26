@@ -99,8 +99,8 @@ for(i in seq_along(Na)[-1]) {
 }
 
 # have a quick peek
-plot(a, Na, type = "b")
-
+plot(a, Na, type = "b", ylim=c(0,1000),
+     main = "Population when F=0 (no fishing)")
 
 #------------------------------------------------------------------------------
 # (7) Calculate catch at age:
