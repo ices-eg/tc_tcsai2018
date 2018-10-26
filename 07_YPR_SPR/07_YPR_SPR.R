@@ -244,6 +244,7 @@ Fsteps <- seq(0, 1, by = 0.1)
 
 # calculate YPR and SPR for each F
 results <- sapply(Fsteps, ypr)
+results <- data.frame(Fsteps, t(results))
 
 #------------------------------------------------------------------------------
 # (15) Plot YPR and SPR as a function of F
@@ -253,11 +254,11 @@ results <- sapply(Fsteps, ypr)
 par(mfrow = c(2,1))
 
 # ypr plot
-plot(Fsteps, results["YPR",], type = "l",
+plot(Fsteps, results$YPR, type = "l",
      ylab = "Yeild per recruit", las = 1)
 
 # spr plot
-plot(Fsteps, results["SPR",], type = "l",
+plot(Fsteps, results$SPR, type = "l",
      ylab = "Spawners per recruit", las = 1)
 
 #------------------------------------------------------------------------------
@@ -290,11 +291,11 @@ abline(h = Fmax)
 #------------------------------------------------------------------------------
 
 # use linear interpolation to get the value of F when SPR is 0.4 SPR when F = 0
-apprx <- approx(results["SPR",], Fsteps, xout = results["SPR",1] * 0.4)
+apprx <- approx(results$SPR, Fsteps, xout = results$SPR[1] * 0.4)
 F40 <- apprx$y
 
 # spr plot
-plot(Fsteps, results["SPR",], type = "b",
+plot(Fsteps, results$SPR, type = "b",
      ylab = "Spawners per recruit", las = 1)
 # a line showing F40
 lines(c(F40, F40), c(0, SPR * 0.4), col = "red")
