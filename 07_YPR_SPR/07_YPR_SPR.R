@@ -282,8 +282,9 @@ Fmax <- opt$maximum
 # status of the tuna fishery in 2007?
 #------------------------------------------------------------------------------
 
-plot(vpafit$F[,3], type = "l")
-abline(h = Fmax)
+plot(as.integer(rownames(vpafit$F)), vpafit$F[,3], type = "l",
+     main = "Fmax", xlab="Year", ylab="Fishing mortality rate")
+abline(h = Fmax, col = "blue")
 
 
 #------------------------------------------------------------------------------
@@ -297,8 +298,8 @@ apprx <- approx(results$SPR, Fsteps, xout = 0.4 * SPR0)
 F40 <- apprx$y
 
 # spr plot
-plot(Fsteps, results$SPR, type = "b",
-     ylab = "Spawners per recruit", las = 1)
+plot(Fsteps, results$SPR, type = "b", main = "F40%",
+     xlab = "Fishing mortality rate", ylab = "Spawners per recruit", las = 1)
 # a line showing F40
 lines(c(F40, F40), c(0, 0.4 * SPR0), col = "red")
 
