@@ -1,8 +1,11 @@
 source("09_sca_function.R")
 
-C <- as.matrix(read.table("nscod_catage.dat", header=TRUE, check.names=FALSE, row.names=1))
-I <- as.matrix(read.table("nscod_survey.dat", header=TRUE, check.names=FALSE, row.names=1))
-M <- as.matrix(read.table("nscod_natmort.dat", header=TRUE, check.names=FALSE, row.names=1))
+C <- as.matrix(read.table("nscod_catage.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
+I <- as.matrix(read.table("nscod_survey.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
+M <- as.matrix(read.table("nscod_natmort.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
 data <- list(C=C, I=I, M=M)
 
 logNa <- rep(8, ncol(C))
@@ -19,6 +22,7 @@ sca(par, data)
 
 run1 <- optim(f=sca, par=par, data=data)
 run2 <- optim(f=sca, par=par, data=data, method="BFGS")
-run3 <- optim(f=sca, par=par, data=data, method="BFGS", control=list(maxit=1000))
+run3 <- optim(f=sca, par=par, data=data, method="BFGS",
+              control=list(maxit=1000))
 
 c(run1=run1$value, run2=run2$value, run3=run3$value)

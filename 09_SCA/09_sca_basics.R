@@ -1,7 +1,10 @@
 ## Read data
-C <- as.matrix(read.table("nscod_catage.dat", header=TRUE, check.names=FALSE, row.names=1))
-I <- as.matrix(read.table("nscod_survey.dat", header=TRUE, check.names=FALSE, row.names=1))
-M <- as.matrix(read.table("nscod_natmort.dat", header=TRUE, check.names=FALSE, row.names=1))
+C <- as.matrix(read.table("nscod_catage.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
+I <- as.matrix(read.table("nscod_survey.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
+M <- as.matrix(read.table("nscod_natmort.dat", header=TRUE,
+                          check.names=FALSE, row.names=1))
 
 minYear <- min(as.integer(rownames(C)))
 maxYear <- max(as.integer(rownames(C)))
@@ -11,13 +14,15 @@ nYears <- maxYear - minYear + 1
 nAges <- maxAge - minAge + 1
 
 ## Prepare containers
-N <- matrix(NA_real_, nrow=nYears+1, ncol=nAges, dimnames=list(minYear:(maxYear+1), minAge:maxAge))
+N <- matrix(NA_real_, nrow=nYears+1, ncol=nAges,
+            dimnames=list(minYear:(maxYear+1), minAge:maxAge))
 F <- matrix(NA_real_, nrow=nYears, ncol=nAges, dimnames=dimnames(C))
 
 ## Set parameter initial values
 logNa <- c(6.8, 5.7, 3.5, 3.0, 1.8, 2.8)
-logNt <- c(7.6, 6.0, 7.6, 6.5, 6.2, 6.8, 5.9, 6.0, 6.7, 6.1, 6.8, 6.3, 5.9, 7.0, 5.2, 5.6, 6.1,
-           5.1, 5.4, 4.7, 5.4, 5.2, 5.9, 5.2, 5.3, 5.3, 5.7, 5.0, 5.4, 5.6, 6.0, 5.1, 4.9)
+logNt <- c(7.6, 6.0, 7.6, 6.5, 6.2, 6.8, 5.9, 6.0, 6.7, 6.1, 6.8, 6.3, 5.9, 7.0,
+           5.2, 5.6, 6.1, 5.1, 5.4, 4.7, 5.4, 5.2, 5.9, 5.2, 5.3, 5.3, 5.7, 5.0,
+           5.4, 5.6, 6.0, 5.1, 4.9)
 logFa <- c(0.2, 1.6, 1.8, 1.6, 1.4)
 logFt <- c(-1.7, -1.7, -1.7, -1.6, -1.8, -1.8, -1.6, -1.8, -1.7, -1.8, -1.8,
            -1.7, -1.8, -1.8, -1.8, -1.7, -1.6, -1.6, -2.1, -1.7, -2.3, -2.0,
