@@ -17,8 +17,8 @@ par <- c(logNa=logNa, logNt=logNt, logFa=logFa, logFt=logFt, logQ=logQ)
 sca(par, data, full=TRUE)
 sca(par, data)
 
-optim(f=sca, par=par, data=data)
-optim(f=sca, par=par, data=data, method="BFGS")
-optim(f=sca, par=par, data=data, method="BFGS", control=list(maxit=1000))
+run1 <- optim(f=sca, par=par, data=data)
+run2 <- optim(f=sca, par=par, data=data, method="BFGS")
+run3 <- optim(f=sca, par=par, data=data, method="BFGS", control=list(maxit=1000))
 
-## Excel solver: -289.9066
+c(run1=run1$value, run2=run2$value, run3=run3$value)
