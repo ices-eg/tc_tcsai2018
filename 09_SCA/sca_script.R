@@ -12,12 +12,11 @@ data <- list(C = C, I = I, M = M)
 
 ## Set initial parameter values
 
-logNa <- rep(8, ncol(C))
-logNt <- rep(8, nrow(C))
-logFa <- rep(0, ncol(C)-1)
-logFt <- rep(0, nrow(C))
-logQ <- rep(-5, ncol(I))
-par <- c(logNa = logNa, logNt = logNt, logFa = logFa, logFt = logFt, logQ = logQ)
+par <- c(logNa = rep(8, ncol(C)),
+         logNt = rep(8, nrow(C)),
+         logFa = rep(0, ncol(C) - 1),
+         logFt = rep(0, nrow(C)),
+         logQ = rep(-5, ncol(I)))
 
 ################################################################################
 
@@ -33,7 +32,8 @@ opt1
 opt2 <- optim(par, sca, data = data, method = "BFGS")
 opt2
 
-opt3 <- optim(par, sca, data = data, method = "BFGS", control = list(maxit = 1000))
+opt3 <- optim(par, sca, data = data,
+              method = "BFGS", control = list(maxit = 1000))
 opt3
 
 # or we can use nlminb
@@ -41,7 +41,8 @@ opt3
 opt4 <- nlminb(par, sca, data = data)
 opt4
 
-opt5 <- nlminb(par, sca, data = data, control = list(eval.max = 1000, iter.max = 1000))
+opt5 <- nlminb(par, sca, data = data,
+               control = list(eval.max = 1000, iter.max = 1000))
 opt5
 
 # summarise fits to check objective value and convergence
@@ -66,18 +67,19 @@ predictions <- sca(run$par, data, full = TRUE)
 
 ## View results
 
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 
 ## 1 Population
 round(predictions$N)
 Year <- as.integer(rownames(predictions$N))
-plot(apply(predictions$N, 2, median), ylim = c(0,400), yaxs = "i", type = "l", lty = 3,
+plot(apply(predictions$N, 2, median), ylim = c(0, 400),
+     yaxs = "i", type = "l", lty = 3,
      main = "Population in 2016 (bars) vs.\n median population (line)",
      xlab = "Age", ylab = "Individuals")
 points(c(tail(predictions$N, 1)), type = "h", lwd = 6)
 
 ## 2 Recruitment
-barplot(predictions$N[,1], ylab = "Individuals at age 1", main = "Recruitment")
+barplot(predictions$N[, 1], ylab = "Individuals at age 1", main = "Recruitment")
 
 ## 3 Selectivity
 round(predictions$F, 2)
@@ -90,4 +92,3 @@ Fbar2.4 <- rowMeans(predictions$F[, 2:4])
 plot(Year[-length(Year)], Fbar2.4,
      ylim = c(0, 1.2), yaxs = "i", type  =  "l",
      main = "Fbar (2-4)", ylab = "Average F at ages 2-4")
-
