@@ -99,8 +99,8 @@ for(i in seq_along(Na)[-1]) {
 }
 
 # have a quick peek
-plot(a, Na, type = "b")
-
+plot(a, Na, type = "b", ylim=c(0,1000),
+     main = "Population when F=0 (no fishing)")
 
 #------------------------------------------------------------------------------
 # (7) Calculate catch at age:
@@ -244,20 +244,21 @@ Fsteps <- seq(0, 1, by = 0.1)
 
 # calculate YPR and SPR for each F
 results <- sapply(Fsteps, ypr)
+results <- data.frame(Fsteps, t(results))
 
 #------------------------------------------------------------------------------
 # (15) Plot YPR and SPR as a function of F
 #------------------------------------------------------------------------------
 
-# plot side by side
-par(mfrow = c(1,2))
+# two plots on one page
+par(mfrow = c(2,1))
 
 # ypr plot
-plot(Fsteps, results["YPR",], type = "l",
+plot(Fsteps, results$YPR, type = "l",
      ylab = "Yeild per recruit", las = 1)
 
 # spr plot
-plot(Fsteps, results["SPR",], type = "l",
+plot(Fsteps, results$SPR, type = "l",
      ylab = "Spawners per recruit", las = 1)
 
 #------------------------------------------------------------------------------
@@ -281,8 +282,9 @@ Fmax <- opt$maximum
 # status of the tuna fishery in 2007?
 #------------------------------------------------------------------------------
 
-plot(vpafit$F[,11], type = "l")
-abline(h = Fmax)
+plot(as.integer(rownames(vpafit$F)), vpafit$F[,3], type = "l",
+     main = "Fmax", xlab="Year", ylab="Fishing mortality rate")
+abline(h = Fmax, col = "blue")
 
 
 #------------------------------------------------------------------------------
@@ -290,12 +292,14 @@ abline(h = Fmax)
 #------------------------------------------------------------------------------
 
 # use linear interpolation to get the value of F when SPR is 0.4 SPR when F = 0
-apprx <- approx(results["SPR",], Fsteps, xout = results["SPR",1] * 0.4)
+results
+SPR0 <- results$SPR[results$Fsteps==0.0]
+apprx <- approx(results$SPR, Fsteps, xout = 0.4 * SPR0)
 F40 <- apprx$y
 
 # spr plot
-plot(Fsteps, results["SPR",], type = "b",
-     ylab = "Spawners per recruit", las = 1)
+plot(Fsteps, results$SPR, type = "b", main = "F40%",
+     xlab = "Fishing mortality rate", ylab = "Spawners per recruit", las = 1)
 # a line showing F40
-lines(c(F40, F40), c(0, SPR * 0.4), col = "red")
+lines(c(F40, F40), c(0, 0.4 * SPR0), col = "red")
 
